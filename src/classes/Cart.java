@@ -3,17 +3,10 @@ package classes;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Cart {
-    private static Cart userCart;
+public class Cart {
     private List<CartItem> cartProducts = new ArrayList<>();
 
-    private Cart(){}
-
-    public static Cart getUserCart(){
-        if(userCart == null)
-            userCart = new Cart();
-        return userCart;
-    }
+    public Cart(){}
 
     public List<CartItem> getCartProducts (){
         return cartProducts;
@@ -25,7 +18,7 @@ public final class Cart {
 
         if (cartProducts.size() == 0) {
             for (CartItem cartProduct : cartProducts) {
-                if (cartProduct.getProduct() == product.get()){
+                if (cartProduct.getProduct().getProductId() == product.getProductId()){
                     cartProduct.addQuantity(quantity);
                     newProduct =  false;
                 }
@@ -34,7 +27,7 @@ public final class Cart {
 
         if(newProduct == true){
             CartItem newCartItem = new CartItem(product, quantity);
-            cartProducts.add(newCartItem)
+            cartProducts.add(newCartItem);
         }
     }
 
