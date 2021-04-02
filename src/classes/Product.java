@@ -6,5 +6,5 @@ abstract public class Product {
     private int productId;
     private String productName;
     private String description;
-    private String category;
+    private float rating;
 }

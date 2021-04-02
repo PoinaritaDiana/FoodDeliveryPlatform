@@ -6,17 +6,13 @@ import java.util.Objects;
 
 public class Order {
     private int orderId;
-    private User client;
+    private Customer client;
     private DeliveryPerson deliveryPerson;
-    //private PaymentType payment;
-
-    private String address;
-
-    /** The date the order was placed **/
+    private String payment;
+    private String deliveryAddress;
     private Date createTime;
-
-    /** Preparation time (in minutes) */
     private int preparationTime;
+
 
     /**
     private Float totalPrice;
