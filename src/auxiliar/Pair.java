@@ -1,7 +1,8 @@
 package auxiliar;
 
-public class Pair<F,S> {
+import java.util.Objects;
 
+public class Pair<F,S> {
     private final F first;
     private final S second;
 
@@ -14,13 +15,18 @@ public class Pair<F,S> {
     public S getSecond() { return second; }
 
     @Override
-    public int hashCode() { return first.hashCode() ^ second.hashCode(); }
+    public int hashCode() {
+        return Objects.hash(first, second);
+    }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Pair)) return false;
-        Pair pairo = (Pair) o;
-        return this.first.equals(pairo.getFirst()) && this.second.equals(pairo.getSecond());
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+
+        Pair pobj = (Pair) obj;
+        return this.first.equals(pobj.getFirst()) && this.second.equals(pobj.getSecond());
     }
 
 }
