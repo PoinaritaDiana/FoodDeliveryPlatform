@@ -1,7 +1,20 @@
 package classes;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class FoodProduct extends Product{
-    private String category;
+    private Set<String> categories = new HashSet<>();
+
+    public FoodProduct(String name, String description, float price, String[] categories){
+        super(name,description,price);
+        for(String category: categories)
+            this.categories.add(category);
+    }
+
+    public Set<String> getCategories() {
+        return categories;
+    }
+
+
 }
