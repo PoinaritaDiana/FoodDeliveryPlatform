@@ -40,10 +40,11 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return "CartItem{" +
-                "Product=" + product.getName() +
-                ", Quantity=" + productQuantity +
-                ", Item Price=" + totalItemPrice +
-                '}';
+        return String.format("Product %s, Quantity: %d, Total price: %f",product.getProductName(), productQuantity,totalItemPrice);
+    }
+
+    public void addQuantity(int quantity){
+        this.productQuantity += quantity;
+        this.totalItemPrice += product.getPrice() * quantity;
     }
 }

@@ -6,16 +6,12 @@ import java.util.List;
 public class Cart {
     private List<CartItem> cartProducts = new ArrayList<>();
 
-    public Cart(){}
-
     public List<CartItem> getCartProducts (){
         return cartProducts;
     }
 
-
     public void addProductToCart(Product product, int quantity){
         boolean newProduct = true;
-
         if (cartProducts.size() == 0) {
             for (CartItem cartProduct : cartProducts) {
                 if (cartProduct.getProduct().getProductId() == product.getProductId()){
@@ -24,7 +20,6 @@ public class Cart {
                 }
             }
         }
-
         if(newProduct == true){
             CartItem newCartItem = new CartItem(product, quantity);
             cartProducts.add(newCartItem);
