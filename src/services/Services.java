@@ -13,7 +13,30 @@ public class Services {
     private List<Restaurant> restaurantList = new ArrayList<>();
     private List<Customer> customersList = new ArrayList<>();
     private List<DeliveryPerson> deliveryPeopleList = new ArrayList<>();
+    // The current user that is logged in
+    // If currentUser == null, then there is no user logged in
     private User currentUser;
+
+
+    // Display list of all restaurants
+    public void showRestaurants(){
+        for(Restaurant restaurant:restaurantList)
+            System.out.println(restaurant);
+    }
+
+    // Search for a restaurant
+    public void searchRestaurant(String restaurantName){
+        boolean found = false;
+        for(Restaurant restaurant:restaurantList)
+            if(restaurant.getRestaurantName().equals(restaurantName)) {
+                System.out.println(restaurant);
+                found = true;
+                break;
+            }
+        if(found==false)
+            System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
+    }
+
 
     private boolean searchCustomer(String username){
         for(Customer customer: customersList)
