@@ -1,5 +1,8 @@
 package services;
 
+import classes.Cart;
+import classes.CartItem;
+import classes.Order;
 import classes.Restaurant;
 import usersManagement.Customer;
 import usersManagement.DeliveryPerson;
@@ -8,6 +11,7 @@ import usersManagement.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Services {
     private List<Restaurant> restaurantList = new ArrayList<>();
@@ -249,6 +253,66 @@ public class Services {
         }
     }
 
+    // Add new order
+    public void placeNewOrder() throws InterruptedException {
+        if(currentUser instanceof Customer) {
+            Cart userCart = ((Customer) currentUser).getCart();
+            float totalPrice = userCart.getCartTotalPrice() + 5;
+            List<CartItem> cartProducts = userCart.getCartProducts();
+            String deliveryPersonId = null;
+            while (deliveryPersonId == null) {
+                System.out.println("Searching for an available delivery person. Please wait..");
+                deliveryPersonId = searchAvailableDeliveryPerson();
+            }
+            String clientId = currentUser.getUserId();
+
+            Scanner recordInput = new Scanner(System.in);
+            System.out.println("Payment type: cash or card?");
+            String userInput = recordInput.nextLine();
+            String payment= userInput;
+
+            System.out.println("Delivery Address: ");
+            String deliveryAddress = recordInput.nextLine();
+            long preparationTime = userCart.getTotalPreparationTime() + 10;;
+
+            Order newOrder = new Order(clientId,deliveryPersonId,cartProducts,totalPrice,payment,deliveryAddress, preparationTime);
+
+            // Asteptare perioada de preparare
+            System.out.println("Please wait. Food in progress....");
+            TimeUnit.SECONDS.sleep(preparationTime-10);
+            System.out.println("Food is on the way");
+            TimeUnit.SECONDS.sleep(10);
+            System.out.println("Food deliverd");
+
+            addOrderHistory(newOrder);
+            for(DeliveryPerson deliveryPerson: deliveryPeopleList)
+                if(deliveryPerson.getUserId()==deliveryPersonId)
+                    deliveryPerson.updateAvailabilityStatus();
+        }
+    }
+
+
+    // Add order to order history
+    private void addOrderHistory(Order order){
+        if(currentUser instanceof Customer) {
+            ((Customer) currentUser).addOrderHistoryList(order);
+        }
+    }
+
+
+    // Find available delivery person: returns ID of available delivery person
+    private String searchAvailableDeliveryPerson(){
+        String deliveryPersonId = null;
+        for(DeliveryPerson deliveryPerson: deliveryPeopleList) {
+            String status = deliveryPerson.getStatus();
+            if(status.equals("available")) {
+                deliveryPersonId = deliveryPerson.getUserId();
+                deliveryPerson.updateAvailabilityStatus();
+                break;
+            }
+        }
+        return deliveryPersonId;
+    }
 
 
 
