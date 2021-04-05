@@ -2,6 +2,7 @@ package usersManagement;
 
 import auxiliar.IDGenerator;
 
+// Abstract class for users, which can be of two types: customers and delivery person
 abstract public class User implements IDGenerator {
     private String userId;
     private String lastName;
@@ -33,24 +34,12 @@ abstract public class User implements IDGenerator {
         return firstName;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    public String getUsername() { return username; }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 
     @Override
     public String toString(){
-        return String.format("User %d is %s %s",userId,lastName, firstName);
+        return String.format("User %d : %s %s",userId,lastName, firstName);
     }
 }

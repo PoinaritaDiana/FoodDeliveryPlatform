@@ -1,14 +1,19 @@
 package usersManagement;
 
+import auxiliar.OrderComparator;
 import classes.Cart;
 import classes.Order;
 import usersManagement.User;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+// Class that extends the user base class, representing the consumer/customer
+// Each customer has a list of orders placed (in ascending order according to the date they were placed)
+// and a shopping cart, where the user can add different products
 
 public class Customer extends User {
-    private List<Order> orderHistoryList = new ArrayList<>();
+    private Set <Order> ordersHistoryList = new TreeSet<>(new OrderComparator());
     private Cart cart;
 
     public Customer(String lastName, String firstName, String phoneNumber, String email, String username, String password) {
@@ -16,16 +21,19 @@ public class Customer extends User {
         cart = new Cart();
     }
 
-    public void displayOrdersHistory() {
-        for(Order order: orderHistoryList)
-            System.out.println(order);
-    }
-
+    //Get user's cart
     public Cart getCart() {
         return cart;
     }
 
-    public void addOrderHistoryList(Order order){
-        orderHistoryList.add(order);
+    // Display the list of all placed orders so far
+    public void displayOrdersHistory() {
+        for(Order order: ordersHistoryList)
+            System.out.println(order);
+    }
+
+    // Add new order to the list of placed orders
+    public void addOrderHistoryList(Order newOrder){
+        ordersHistoryList.add(newOrder);
     }
 }
