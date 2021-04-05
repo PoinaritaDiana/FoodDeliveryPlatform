@@ -16,4 +16,8 @@ public class DeliveryPerson extends User {
         else
             this.availabilityStatus = "available";
     }
+
+    public String getStatus() {
+        return availabilityStatus;
+    }
 }
