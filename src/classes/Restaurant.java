@@ -22,8 +22,6 @@ public class Restaurant implements IDGenerator {
         this.phoneNumber = phoneNumber;
         this.rating = rating;
         this.menu = menu;
-        // this.menu = new Menu (menu);
-        // trebuie sa fac copy constructor la menu
     }
 
     public String getRestaurantId() {
@@ -32,18 +30,6 @@ public class Restaurant implements IDGenerator {
 
     public String getRestaurantName() {
         return restaurantName;
-    }
-
-    public String getRestaurantAddress() {
-        return restaurantAddress;
-    }
-
-    public String getRestaurantType() {
-        return restaurantType;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 
     public float getRating() {
@@ -57,6 +43,6 @@ public class Restaurant implements IDGenerator {
 
     @Override
     public String toString(){
-        return String.format("Restaurant %d: %s. Contact: %d, Rating: %f", restaurantId, restaurantName, phoneNumber, rating);
+        return String.format("Restaurant %d: %s. \r\n Contact: %d, Rating: %f", restaurantId, restaurantName, phoneNumber, rating);
     }
 }

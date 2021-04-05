@@ -1,5 +1,6 @@
 package services;
 
+import auxiliar.RestaurantComparator;
 import classes.Cart;
 import classes.CartItem;
 import classes.Order;
@@ -22,8 +23,10 @@ public class Services {
     private User currentUser;
 
 
+
+    // ---------- RESTAURANT FUNCTIONS ---------
     // Display list of all restaurants
-    public void showRestaurants(){
+    public void showAllRestaurants(){
         for(Restaurant restaurant:restaurantList)
             System.out.println(restaurant);
     }
@@ -35,11 +38,27 @@ public class Services {
             if(restaurant.getRestaurantName().equals(restaurantName)) {
                 System.out.println(restaurant);
                 found = true;
-                break;
             }
         if(found==false)
             System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
     }
+
+    // Add rating to a restaurant
+    public void addRestaurantRating(String restaurantId, float newRating){
+        for(Restaurant restaurant:restaurantList)
+            if(restaurant.getRestaurantId().equals(restaurantId)) {
+                restaurant.addRestaurantRating(newRating);
+                System.out.println("Thank you for your appreciation!");
+                break;
+            }
+    }
+
+
+
+
+
+
+
 
 
     private boolean searchCustomer(String username){
@@ -314,6 +333,14 @@ public class Services {
         return deliveryPersonId;
     }
 
+
+    private void databaseInitialization(){
+        //Customers
+        //Delivery People
+        //Products
+        //Menu
+        //Restaurants
+    }
 
 
 }
