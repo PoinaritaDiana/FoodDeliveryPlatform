@@ -24,97 +24,69 @@ public class Services {
 
 
 
-    // ---------- RESTAURANT FUNCTIONS ---------
-    // Display list of all restaurants
-    public void showAllRestaurants(){
-        for(Restaurant restaurant:restaurantList)
-            System.out.println(restaurant);
-    }
+    // ----------- REGISTRATION, AUTHENTICATION AND LOGOUT ---------
 
-    // Search for a restaurant
-    public void searchRestaurant(String restaurantName){
-        boolean found = false;
-        for(Restaurant restaurant:restaurantList)
-            if(restaurant.getRestaurantName().equals(restaurantName)) {
-                System.out.println(restaurant);
-                found = true;
-            }
-        if(found==false)
-            System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
-    }
-
-    // Add rating to a restaurant
-    public void addRestaurantRating(String restaurantId, float newRating){
-        for(Restaurant restaurant:restaurantList)
-            if(restaurant.getRestaurantId().equals(restaurantId)) {
-                restaurant.addRestaurantRating(newRating);
-                System.out.println("Thank you for your appreciation!");
-                break;
-            }
-    }
-
-
-
-
-
-
-
-
-
+    // Search customer in the list by username
     private boolean searchCustomer(String username){
         for(Customer customer: customersList)
-            if(customer.getUsername() == username)
+            if(customer.getUsername().equals(username))
                 return true;
         return false;
     }
 
+    // Check the correct password entered for the given customer
     private boolean checkCustomerPassword(String username,String password){
         for(Customer customer: customersList)
-            if(customer.getUsername() == username && customer.getPassword() == password)
+            if(customer.getUsername().equals(username) && customer.getPassword().equals(password))
                 return true;
         return false;
     }
 
+    // Get the customer with the given username
     private Customer getCustomer(String username){
         Customer searchedCustomer = null;
         for(Customer customer: customersList)
-            if (customer.getUsername() == username)
+            if (customer.getUsername().equals(username))
                 searchedCustomer = customer;
-
         return searchedCustomer;
     }
 
 
+    // Search delivery person in the list by username
     private boolean searchDeliveryPerson(String username){
         for(DeliveryPerson deliveryPerson: deliveryPeopleList)
-            if(deliveryPerson.getUsername() == username)
+            if(deliveryPerson.getUsername().equals(username))
                 return true;
         return false;
     }
 
+    // Check the correct password entered for the given delivery person
     private boolean checkDeliveryPassword(String username,String password){
         for(DeliveryPerson deliveryPerson: deliveryPeopleList)
-            if(deliveryPerson.getUsername() == username && deliveryPerson.getPassword() == password)
+            if(deliveryPerson.getUsername().equals(username) && deliveryPerson.getPassword().equals(password))
                 return true;
         return false;
     }
 
+    // Get the delivery person with the given username
     private DeliveryPerson getDeliveryPerson(String username){
         DeliveryPerson searchedDeliveryPerson = null;
         for(DeliveryPerson deliveryPerson: deliveryPeopleList)
-            if (deliveryPerson.getUsername() == username)
+            if (deliveryPerson.getUsername().equals(username))
                 searchedDeliveryPerson = deliveryPerson;
         return searchedDeliveryPerson;
     }
 
 
+    // Log out function
     public void logOut(){
         System.out.println("Logged out");
-        currentUser=null;
+        currentUser = null;
     }
 
 
-    public void userAuthenticationForm(){
+    // Display authentication form for user
+    public void userAuthenticationForm() throws InterruptedException {
         Scanner recordInput = new Scanner(System.in);
         System.out.println("LOG IN PAGE");
 
@@ -216,12 +188,14 @@ public class Services {
     }
 
 
-
-    public void userRegistrationForm(){
+    // Display registration form for a new user
+    public void userRegistrationForm() throws InterruptedException {
+        Scanner recordInput = new Scanner(System.in);
         while(true) {
-            Scanner recordInput = new Scanner(System.in);
             System.out.println("Create new account? Type YES to continue: ");
             String newAccount = recordInput.nextLine();
+
+            // New account
             if ("yes".equalsIgnoreCase(newAccount)) {
                 System.out.println("Type 1 for Customer or 2 for Delivery Person:");
                 int userType = recordInput.nextInt();
@@ -238,27 +212,30 @@ public class Services {
                 String username = recordInput.nextLine();
                 System.out.println("Password: ");
                 String password = recordInput.nextLine();
-                //System.out.println("Type password again: ");
-                //String passwordCheck = recordInput.nextLine();
 
+                // Account for new customer
                 if(userType == 1){
                     Customer newCustomer = new Customer(lastName, firstName, phoneNumber, email, username, password);
                     customersList.add(newCustomer);
                     System.out.println("Redirecting to Log In page...");
+                    Thread.sleep(3000);
                     userAuthenticationForm();
                 }
+                // Account for new delivery person
                 else{
                     DeliveryPerson newDeliveryPerson = new DeliveryPerson(lastName, firstName, phoneNumber, email, username, password);
                     deliveryPeopleList.add(newDeliveryPerson);
                     System.out.println("Redirecting to Log In page...");
+                    Thread.sleep(3000);
                     userAuthenticationForm();
                 }
             }
             else {
-                System.out.println("Already have an account? Type YES to redirect to Log In: ");
+                System.out.println("Already have an account? Type YES to redirect to Log In Page: ");
                 String redirectAuthentication = recordInput.nextLine();
                 if ("yes".equalsIgnoreCase(newAccount)) {
-                    System.out.println("Redirecting to Log In....");
+                    System.out.println("Redirecting to Log In page...");
+                    Thread.sleep(3000);
                     userAuthenticationForm();
                 } else {
                     System.out.println("Invalid input! Type NO to exit or YES to continue");
@@ -271,6 +248,47 @@ public class Services {
             }
         }
     }
+
+
+
+
+    // ---------- RESTAURANT FUNCTIONS ---------
+    // Display list of all restaurants
+    public void showAllRestaurants(){
+        for(Restaurant restaurant:restaurantList)
+            System.out.println(restaurant);
+    }
+
+    // Search for a restaurant
+    public void searchRestaurant(String restaurantName){
+        boolean found = false;
+        for(Restaurant restaurant:restaurantList)
+            if(restaurant.getRestaurantName().equals(restaurantName)) {
+                System.out.println(restaurant);
+                found = true;
+            }
+        if(found==false)
+            System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
+    }
+
+    // Add rating to a restaurant
+    public void addRestaurantRating(String restaurantId, float newRating){
+        for(Restaurant restaurant:restaurantList)
+            if(restaurant.getRestaurantId().equals(restaurantId)) {
+                restaurant.addRestaurantRating(newRating);
+                System.out.println("Thank you for your appreciation!");
+                break;
+            }
+    }
+
+
+
+
+
+
+
+
+
 
     // Add new order
     public void placeNewOrder() throws InterruptedException {
