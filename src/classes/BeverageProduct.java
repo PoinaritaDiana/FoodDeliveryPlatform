@@ -22,14 +22,14 @@ public class BeverageProduct extends Product{
 
     @Override
     public String toString() {
-        return "BeverageProduct{" +
-                "productId=" + getProductId() +
-                ", productName='" + getProductName() + '\'' +
-                ", price=" + getPrice() +
-                ", description='" + getDescription() + '\'' +
-                ", rating=" + getRating() +
-                "alcoholicDrink=" + alcoholicDrink +
-                ", drinkType='" + drinkType + '\'' +
+        return "Beverage Product{" +
+                "Product Id=" + getProductId() +
+                ", Product Name='" + getProductName() + '\'' +
+                ", Price=" + getPrice() +
+                ", Description='" + getDescription() + '\'' +
+                ", Rating=" + getRating() +
+                ", Alcoholic Drink=" + alcoholicDrink +
+                ", Drink Type='" + drinkType + '\'' +
                 '}';
     }
 }

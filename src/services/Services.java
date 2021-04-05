@@ -308,8 +308,46 @@ public class Services {
 
 
 
+    //----------- PRODUCT AND MENU FUNCTIONS ----------
+    // Add rating to a product
+    public void addRatingToProduct(Product product, float rating){
+        product.updateRating(rating);
+    }
+
+    // Show menu for given restaurant
+    public void showRestaurantMenu(Restaurant restaurant){
+        restaurant.getMenu().showMenu();
+    }
+
+    // Search product in restaurant
+    public void searchProductInRestaurant(Restaurant restaurant, String productName){
+        boolean found = restaurant.getMenu().searchProductInMenu(productName);
+        if(found==true)
+            restaurant.getMenu().displayProductInMenu(productName);
+        else
+            System.out.println(String.format("We're sorry! Product %s does not exist in %s restaurant",productName, restaurant.getRestaurantName()));
+    }
+
+
+    // Display restaurants which prepares the given product
+    public void searchProductInRestaurants(String productName){
+        for(Restaurant restaurant: restaurantList)
+            if(restaurant.getMenu().searchProductInMenu(productName))
+                System.out.println(restaurant);
+
+    }
+
+
 
     // -------------- ORDER FUNCTIONS ----------
+    // Display orders history
+    public void showOrderHistory() {
+        if(currentUser instanceof Customer) {
+            ((Customer) currentUser).displayOrdersHistory();
+        }
+    }
+
+
     // Add new order
     public void placeNewOrder() throws InterruptedException {
         if(currentUser instanceof Customer) {

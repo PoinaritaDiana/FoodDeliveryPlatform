@@ -1,12 +1,56 @@
 package classes;
-
 import auxiliar.Pair;
-import java.util.Map;
-import java.util.TreeMap;
+import auxiliar.ProductComparator;
 
+import java.util.Set;
+import java.util.TreeSet;
+
+// Each menu has a list of food products and a list of drink products (sorted alphabetically)
 public class Menu {
-    // Each product in the menu has its own price and quantity left
-    private Map < FoodProduct, Pair<Float,Integer> >  foodProductList= new TreeMap<>();
-    private Map < BeverageProduct, Pair<Float,Integer> >  beverageProductList= new TreeMap<>();
+    private Set <FoodProduct> foodProductList= new TreeSet<>(new ProductComparator());
+    private Set <BeverageProduct>  beverageProductList= new TreeSet<>(new ProductComparator());
+
+    public Set <FoodProduct> getFoodProductList() {
+        return foodProductList;
+    }
+    public Set <BeverageProduct> getBeverageProductList() {
+        return beverageProductList;
+    }
+
+
+    public void showMenu(){
+        System.out.println("Food:");
+        for(FoodProduct product : foodProductList)
+            System.out.println(product);
+        System.out.println("Beverage:");
+        for(BeverageProduct product : beverageProductList)
+            System.out.println(product);
+    }
+
+
+    public boolean searchProductInMenu(String productName){
+        boolean found = false;
+        for(FoodProduct product : foodProductList)
+            if(product.getProductName().equalsIgnoreCase(productName))
+                found=true;
+
+        for(BeverageProduct product : beverageProductList)
+            if(product.getProductName().equalsIgnoreCase(productName))
+                found=true;
+
+        return found;
+    }
+
+
+    public void displayProductInMenu(String productName){
+        for(FoodProduct product : foodProductList)
+            if(product.getProductName().equalsIgnoreCase(productName))
+                System.out.println(product);
+
+        for(BeverageProduct product : beverageProductList)
+            if(product.getProductName().equalsIgnoreCase(productName))
+                System.out.println(product);
+    }
+
 
 }

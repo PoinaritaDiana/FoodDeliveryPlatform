@@ -15,4 +15,17 @@ public class FoodProduct extends Product{
     public Set<String> getCategories() {
         return categories;
     }
+
+    @Override
+    public String toString() {
+        return "Food product {" +
+                "Product Id=" + productId +
+                ", Product Name='" + productName + '\'' +
+                ", Price=" + price +
+                ", Preparation time =" + preparationTime +
+                ", Description='" + description + '\'' +
+                ", Rating=" + rating + "stars" + '\''+
+                ", Categories=" + categories + '\''+
+                '}';
+    }
 }

@@ -36,6 +36,10 @@ public class Restaurant implements IDGenerator {
         return rating;
     }
 
+    public Menu getMenu() {
+        return menu;
+    }
+
     // Add new rating for restaurant
     public void addRestaurantRating(float newRating){
         this.rating = (this.rating + newRating)/2;
