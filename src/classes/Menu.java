@@ -17,6 +17,15 @@ public class Menu {
         return beverageProductList;
     }
 
+    public Menu(Product [] productsList) {
+        for(Product product: productsList) {
+            if (product instanceof FoodProduct)
+                this.foodProductList.add((FoodProduct) product);
+            else
+                this.beverageProductList.add((BeverageProduct) product);
+        }
+
+    }
 
     public void showMenu(){
         System.out.println("Food:");

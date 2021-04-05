@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Services {
+class Services {
+    private static Services servicesInstance = null;
+
     private List<Restaurant> restaurantList = new ArrayList<>();
     private List<Customer> customersList = new ArrayList<>();
     private List<DeliveryPerson> deliveryPeopleList = new ArrayList<>();
@@ -19,6 +21,16 @@ public class Services {
     // If currentUser == null, then there is no user logged in
     private User currentUser;
 
+    private Services(){
+        databaseInitialization();
+    }
+
+    public static Services getServicesInstance(){
+        if (servicesInstance == null)
+            servicesInstance = new Services();
+
+        return servicesInstance;
+    }
 
 
     // ----------- REGISTRATION, AUTHENTICATION AND LOGOUT ---------
@@ -414,10 +426,47 @@ public class Services {
     // ------------ ADD DATA --------------
     private void databaseInitialization(){
         //Customers
+        Customer customer1 =  new Customer("Poinarita","Diana","0123456789",
+                "poinaritadiana@fmi.ro", "dianap", "password123");
+        Customer customer2 =  new Customer("Ionescu","Maria","0123456789",
+                "ionescumaria@fmi.ro", "mariai", "password123");
+        Customer customer3 =  new Customer("Popescu","Mircea","0123456789",
+                "popescumircea@fmi.ro", "mirceap", "password123");
+        customersList.add(customer1);
+        customersList.add(customer2);
+        customersList.add(customer3);
+
+
         //Delivery People
+        DeliveryPerson dperson1= new DeliveryPerson("Mihai","Andrei","0123456789",
+                "mihaiandrei@fmi.ro", "andreim","password123");
+        deliveryPeopleList.add(dperson1);
+
+
         //Products
+        String [] categories = {"vegan", "post"};
+        Product product1 =  new FoodProduct("Cartofi","cartofi prajiti", 5f, 10f,categories);
+        Product product2 =  new FoodProduct("Paste","paste carbonara", 25f, 20f,categories);
+        Product product3 =  new BeverageProduct("Apa","apa plata", 2f, 0f,false,"cold");
+        Product product4 =  new BeverageProduct("Suc","suc de portocale", 5f, 0f,false, "cold");
+
+
         //Menu
+        Product [] p1 = {product1};
+        Product [] p2 = {product3};
+        Product [] p3 = {product2, product4};
+        Menu menu1= new Menu(p1);
+        Menu menu2 = new Menu(p2);
+        Menu menu3 = new Menu(p3);
+
         //Restaurants
+        Restaurant restaurant1 = new Restaurant("Nume", "Bucuresti, nr.1", "traditional","0725181617", 0F, menu1);
+        Restaurant restaurant2 = new Restaurant("NumeRestaurant", "Bucuresti, nr.2", "asiatic","0766721812", 0F, menu2);
+        Restaurant restaurant3 = new Restaurant("Test", "Bucuresti, nr.3", "italian","0718371971", 0F, menu3);
+        restaurantList.add(restaurant1);
+        restaurantList.add(restaurant2);
+        restaurantList.add(restaurant3);
+
     }
 
 
