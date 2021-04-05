@@ -4,8 +4,9 @@ public class BeverageProduct extends Product{
     private boolean alcoholicDrink;
     private String drinkType;
 
-    public BeverageProduct(String name, String description, float price, boolean alcoholicDrink, String type){
-        super(name,description,price);
+    public BeverageProduct(String name, String description, float price, float preparationTime,
+                           boolean alcoholicDrink, String type){
+        super(name,description,price,preparationTime);
         this.alcoholicDrink = alcoholicDrink;
         this.drinkType = type;
     }
