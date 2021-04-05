@@ -1,10 +1,7 @@
 package services;
 
 import auxiliar.RestaurantComparator;
-import classes.Cart;
-import classes.CartItem;
-import classes.Order;
-import classes.Restaurant;
+import classes.*;
 import usersManagement.Customer;
 import usersManagement.DeliveryPerson;
 import usersManagement.User;
@@ -283,13 +280,36 @@ public class Services {
 
 
 
+    //----------- CART FUNCTIONS -------------
+    // Add product to cart
+    public void addProductInMyCart(Product product, int quantity){
+        ((Customer) currentUser).getCart().addProductToCart(product,quantity);
+    }
+
+    // Show products in cart
+    public void showProductsMyCart(){
+        ((Customer) currentUser).getCart().showCartItems();
+    }
+
+    // Empty cart
+    public void clearMyCart(){
+        ((Customer) currentUser).getCart().clearCart();
+    }
+
+    // Change product quantity in cart
+    public void decreaseProductQuantity(CartItem cartItem, int quantity){
+        cartItem.addQuantity(quantity);
+    }
+
+    // Remove product from cart
+    public void removeProductFromCart(CartItem cartItem){
+        ((Customer) currentUser).getCart().removeCartItem(cartItem);
+    }
 
 
 
 
-
-
-
+    // -------------- ORDER FUNCTIONS ----------
     // Add new order
     public void placeNewOrder() throws InterruptedException {
         if(currentUser instanceof Customer) {
@@ -352,6 +372,8 @@ public class Services {
     }
 
 
+
+    // ------------ ADD DATA --------------
     private void databaseInitialization(){
         //Customers
         //Delivery People
