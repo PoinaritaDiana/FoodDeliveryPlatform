@@ -36,4 +36,20 @@ public class Cart {
         cartProducts.clear();
     }
 
+    public float getCartTotalPrice(){
+        float totalPrice = 0 ;
+        for (CartItem cartProduct : cartProducts) {
+            totalPrice += cartProduct.getTotalItemPrice();
+        }
+        return totalPrice;
+    }
+
+    public long getTotalPreparationTime(){
+        long preparationTime = 0 ;
+        for (CartItem cartProduct : cartProducts) {
+            preparationTime += cartProduct.getProduct().getPreparationTime();
+        }
+        return preparationTime;
+    }
+
 }
