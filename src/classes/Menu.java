@@ -50,6 +50,22 @@ public class Menu {
         return found;
     }
 
+    public Product searchProductInMenuByID(String productId){
+        Product searchedProduct = null;
+        for(FoodProduct product : foodProductList)
+            if(product.getProductId().equals(productId)){
+                searchedProduct = product;
+                break;
+            }
+
+        for(BeverageProduct product : beverageProductList)
+            if(product.getProductId().equals(productId)){
+                searchedProduct = product;
+                break;
+            }
+
+        return searchedProduct;
+    }
 
     public void displayProductInMenu(String productName){
         for(FoodProduct product : foodProductList)
