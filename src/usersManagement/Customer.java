@@ -36,4 +36,9 @@ public class Customer extends User {
     public void addOrderHistoryList(Order newOrder){
         ordersHistoryList.add(newOrder);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Customer %s : %s %s",getUserId(), getLastName(), getFirstName());
+    }
 }
