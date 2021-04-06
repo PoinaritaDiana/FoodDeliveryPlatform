@@ -19,6 +19,7 @@ public class CartItem {
 
     public float getTotalItemPrice() { return totalItemPrice; }
 
+    public int getProductQuantity() { return productQuantity; }
 
     @Override
     public String toString() {
