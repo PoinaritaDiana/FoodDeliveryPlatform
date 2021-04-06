@@ -1,5 +1,11 @@
 package services;
 
 public class Main {
-    Services services = Services.getServicesInstance();
+    private static void testFirstPhase(){
+        Services services = Services.getServicesInstance();
+    }
+
+    public static void main(String[] args){
+        testFirstPhase();
+    }
 }
