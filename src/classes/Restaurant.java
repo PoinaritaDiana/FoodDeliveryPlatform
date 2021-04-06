@@ -47,6 +47,6 @@ public class Restaurant implements IDGenerator {
 
     @Override
     public String toString(){
-        return String.format("Restaurant %d: %s. \r\n Contact: %d, Rating: %f", restaurantId, restaurantName, phoneNumber, rating);
+        return String.format("Restaurant %s: %s. \r\n Contact: %s, Rating: %f", restaurantId, restaurantName, phoneNumber, rating);
     }
 }
