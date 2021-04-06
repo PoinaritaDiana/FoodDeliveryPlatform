@@ -6,7 +6,9 @@ import usersManagement.Customer;
 import usersManagement.DeliveryPerson;
 import usersManagement.User;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -19,18 +21,310 @@ class Services {
     private List<DeliveryPerson> deliveryPeopleList = new ArrayList<>();
     // The current user that is logged in
     // If currentUser == null, then there is no user logged in
-    private User currentUser;
+    private User currentUser = null;
 
-    private Services(){
-        databaseInitialization();
-    }
 
     public static Services getServicesInstance(){
         if (servicesInstance == null)
             servicesInstance = new Services();
-
         return servicesInstance;
     }
+
+
+    private Services(){
+        // Load data (for testing functionality only)
+        databaseInitialization();
+        // Test data
+        testCustomersList();
+        testDeliveryPeopleList();
+        testRestaurantsList();
+
+        displayWelcomeMessage();
+    }
+
+    // Private methods for testing data
+    private void testCustomersList(){
+        System.out.println("Customers:");
+        for(Customer customer: customersList)
+            System.out.println(customer);
+    }
+    private void testDeliveryPeopleList(){
+        System.out.println("Delivery People:");
+        for(DeliveryPerson deliveryPerson: deliveryPeopleList)
+            System.out.println(deliveryPerson);
+    }
+    private void testRestaurantsList(){
+        //Restaurants should be sorted in descending order according to their rating
+        System.out.println("Restaurants:");
+        for(Restaurant restaurant: restaurantList)
+            System.out.println(restaurant);
+
+    }
+
+
+    // Display application functionalities
+    private void displayOptions(){
+        System.out.println("Food Delivery Platform Option Menu (choose number):");
+        System.out.println("1. Log in as another user");
+        System.out.println("2. Register a new user");
+        System.out.println("3. Log out");
+        System.out.println("4. See list of all restaurants");
+        System.out.println("5. Search restaurant by name");
+        System.out.println("6. Add rating to a specific restaurant");
+        System.out.println("7. See menu of a specific restaurant");
+        System.out.println("8. Add rating to a specific product");
+        System.out.println("9. Search product by name in a specific restaurant");
+        System.out.println("10. Search product by name in all restaurants");
+        System.out.println("11. Place order");
+        System.out.println("12. See your order history");
+        System.out.println("13. Add product to your cart");
+        System.out.println("14. See your cart");
+        System.out.println("15. Empty cart");
+        System.out.println("16. Remove product from cart");
+        System.out.println("17. Remove quantity of product from your cart");
+        System.out.println("18. Show option menu");
+        System.out.println("\n");
+    }
+
+    private void userInterface(){
+        // Print available options
+        displayOptions();
+
+        // Get option
+        System.out.println("Your option: ");
+        Scanner optionInput = new Scanner(System.in);
+
+        while(currentUser!=null){
+            System.out.println("Your option: ");
+            String userOption = optionInput.nextLine();
+
+            switch(userOption) {
+                case "1": {
+                    logOut();
+                    userAuthenticationForm();
+                }
+                case "2": {
+                    logOut();
+                    userRegistrationForm();
+                }
+                case "3": {
+                    logOut();
+                    System.out.println("Thank you for using DeliverEAT");
+                    break;
+                }
+                case "4": {
+                    System.out.println("See our restaurant:");
+                    showAllRestaurants();
+                    break;
+                }
+                case "5": {
+                    System.out.println("Enter name of the restaurant:");
+                    Scanner nameInput = new Scanner(System.in);
+                    String restaurantName = nameInput.nextLine();
+                    searchRestaurant(restaurantName);
+                    break;
+                }
+                case "6": {
+                    System.out.println("Enter name of the restaurant to add rating:");
+                    Scanner nameInput = new Scanner(System.in);
+                    String restaurantName = nameInput.nextLine();
+                    Restaurant searchedRestaurant = getRestaurantByName(restaurantName);
+                    if(searchedRestaurant!=null) {
+                        System.out.println("Enter rating:");
+                        Scanner ratingInput = new Scanner(System.in);
+                        float newRating = Float.parseFloat(ratingInput.nextLine());
+                        addRestaurantRating(searchedRestaurant.getRestaurantId(), newRating);
+                    }
+                    else
+                        System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
+                    break;
+                }
+                case "7": {
+                    System.out.println("Enter name of the restaurant:");
+                    Scanner nameInput = new Scanner(System.in);
+                    String restaurantName = nameInput.nextLine();
+                    // Return restaurant with this name
+                    Restaurant searchedRestaurant = getRestaurantByName(restaurantName);
+                    if(searchedRestaurant!=null)
+                        showRestaurantMenu(searchedRestaurant);
+                    else
+                        System.out.println(String.format("No result for \"%s\".Try again.",restaurantName));
+                    break;
+                }
+                case "8": {
+                    System.out.println("Enter productID to add rating: ");
+                    Scanner productIdInput = new Scanner(System.in);
+                    Product product = getProductById(productIdInput.nextLine());
+                    if(product!=null) {
+                        System.out.println("Enter rating:");
+                        Scanner ratingInput = new Scanner(System.in);
+                        float newRating = Float.parseFloat(ratingInput.nextLine());
+                        addRatingToProduct(product, newRating);
+                    }
+                    else{
+                        System.out.println("We're sorry. This product does not exist :(");
+                    }
+                    break;
+                }
+                case "9": {
+                    Scanner nameInput = new Scanner(System.in);
+                    System.out.println("Enter name of the product:");
+                    String productName = nameInput.nextLine();
+
+                    System.out.println("Enter name of the restaurant:");
+                    String restaurantName = nameInput.nextLine();
+                    Restaurant searchedRestaurant = getRestaurantByName(restaurantName);
+
+                    searchProductInRestaurant(searchedRestaurant, productName);
+                    break;
+                }
+                case "10": {
+                    System.out.println("Enter name of the product:");
+                    Scanner nameInput = new Scanner(System.in);
+                    String productName = nameInput.nextLine();
+                    searchProductInRestaurants(productName);
+                    break;
+                }
+                case "11": {
+                    placeNewOrder();
+                    break;
+                }
+                case "12": {
+                    showOrderHistory();
+                    break;
+                }
+                case "13": {
+                    System.out.println("Add product to your cart by productID: ");
+                    Scanner productIdInput = new Scanner(System.in);
+                    // Get product by id
+                    Product product = getProductById(productIdInput.nextLine());
+                    if(product!=null) {
+                        System.out.println("Add quantity for the selected product: ");
+                        Scanner quantityInput = new Scanner(System.in);
+                        int quantity = Integer.parseInt(quantityInput.nextLine());
+                        if (quantity <= 0)
+                            System.out.println("Quantity must be a positive integer!");
+                        else
+                            addProductInMyCart(product, quantity);
+                    }
+                    else{
+                        System.out.println("We're sorry. This product does not exist :(");
+                    }
+                    break;
+                }
+                case "14": {
+                    showProductsMyCart();
+                    break;
+                }
+                case "15": {
+                    clearMyCart();
+                    break;
+                }
+                case "16": {
+                    System.out.println("Remove product from your cart by productID: ");
+                    Scanner productIdInput = new Scanner(System.in);
+                    CartItem cartItem = getCartItemByProductID(productIdInput.nextLine());
+                    if(cartItem!=null)
+                        removeProductFromCart(cartItem);
+                    else
+                        System.out.println("There is no product in your cart with this ID");
+                    break;
+                }
+                case "17": {
+                   // DE ADAUAGT
+                    System.out.println("Remove product from your cart by productID: ");
+                    Scanner productIdInput = new Scanner(System.in);
+                    CartItem cartItem = getCartItemByProductID(productIdInput.nextLine());
+                    if(cartItem!=null) {
+                        int currentQuantity = cartItem.getProductQuantity();
+                        System.out.println("Quantity you want to decrease for this product: ");
+                        Scanner quantityInput = new Scanner(System.in);
+                        int quantity = Integer.parseInt(quantityInput.nextLine());
+                        if (currentQuantity-quantity < 0) {
+                            System.out.println("The quantity of product in the cart is less than the value entered!");
+                        }
+                        else {
+                            if(currentQuantity == quantity)
+                                removeProductFromCart(cartItem);
+                            else
+                                decreaseProductQuantity(cartItem, quantity);
+                        }
+                    }
+                    else{
+                        System.out.println("There is no product in your cart with this ID");
+                    }
+                    break;
+                }
+                case "18": {
+                    displayOptions();
+                    break;
+                }
+                default:{
+                    System.out.println("No option with number " + userOption);
+                    break;
+                }
+            }
+
+
+        }
+    }
+
+
+    private CartItem getCartItemByProductID(String productId){
+        CartItem searchedCartItem =null;
+        for(CartItem cartItem: ((Customer)currentUser).getCart().getCartProducts())
+            if(cartItem.getProduct().getProductId().equals(productId)){
+                searchedCartItem = cartItem;
+                break;
+            }
+        return searchedCartItem;
+    }
+
+
+
+    private Product getProductById(String productId){
+        Product searchedProduct = null;
+        for(Restaurant restaurant:restaurantList){
+            Product productInMenu = restaurant.getMenu().searchProductInMenuByID(productId);
+            if(productInMenu!=null) {
+                searchedProduct= productInMenu;
+                break;
+            }
+        }
+        return searchedProduct;
+    }
+
+
+    private Restaurant getRestaurantByName(String restaurantName){
+        Restaurant searchedRestauarant = null;
+        for(Restaurant restaurant:restaurantList)
+            if(restaurant.getRestaurantName().equals(restaurantName)) {
+                searchedRestauarant = restaurant;
+                break;
+            }
+        return searchedRestauarant;
+    }
+
+    // Display the message that the user receives the first time he enters the application
+    private void displayWelcomeMessage(){
+        System.out.println("WELCOME TO DeliverEAT");
+        System.out.println("You have to log in first!");
+        System.out.println("Press enter to continue...");
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Redirecting to log in page
+        userAuthenticationForm();
+
+        // Test registration of new user and currentUser
+        testCustomersList();
+        System.out.println(currentUser);
+
+        userInterface();
+    }
+
 
 
     // ----------- REGISTRATION, AUTHENTICATION AND LOGOUT ---------
@@ -95,7 +389,7 @@ class Services {
 
 
     // Display authentication form for user
-    public void userAuthenticationForm() throws InterruptedException {
+    public void userAuthenticationForm(){
         Scanner recordInput = new Scanner(System.in);
         System.out.println("LOG IN PAGE");
 
@@ -147,7 +441,6 @@ class Services {
             else {
                 System.out.println("Log in as a delivery person? Yes or No:");
                 String deliveryPersonLogIn = recordInput.nextLine();
-
                 // Log in as a delivery person
                 if ("yes".equalsIgnoreCase(deliveryPersonLogIn)) {
                     // Get username and password
@@ -198,7 +491,7 @@ class Services {
 
 
     // Display registration form for a new user
-    public void userRegistrationForm() throws InterruptedException {
+    public void userRegistrationForm(){
         Scanner recordInput = new Scanner(System.in);
         while(true) {
             System.out.println("Create new account? Type YES to continue: ");
@@ -207,7 +500,7 @@ class Services {
             // New account
             if ("yes".equalsIgnoreCase(newAccount)) {
                 System.out.println("Type 1 for Customer or 2 for Delivery Person:");
-                int userType = recordInput.nextInt();
+                int userType = Integer.parseInt(recordInput.nextLine());
 
                 System.out.println("Last name: ");
                 String lastName = recordInput.nextLine();
@@ -227,16 +520,26 @@ class Services {
                     Customer newCustomer = new Customer(lastName, firstName, phoneNumber, email, username, password);
                     customersList.add(newCustomer);
                     System.out.println("Redirecting to Log In page...");
-                    Thread.sleep(3000);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     userAuthenticationForm();
+                    break;
                 }
                 // Account for new delivery person
                 else{
                     DeliveryPerson newDeliveryPerson = new DeliveryPerson(lastName, firstName, phoneNumber, email, username, password);
                     deliveryPeopleList.add(newDeliveryPerson);
                     System.out.println("Redirecting to Log In page...");
-                    Thread.sleep(3000);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     userAuthenticationForm();
+                    break;
                 }
             }
             else {
@@ -244,8 +547,13 @@ class Services {
                 String redirectAuthentication = recordInput.nextLine();
                 if ("yes".equalsIgnoreCase(newAccount)) {
                     System.out.println("Redirecting to Log In page...");
-                    Thread.sleep(3000);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     userAuthenticationForm();
+                    break;
                 } else {
                     System.out.println("Invalid input! Type NO to exit or YES to continue");
                     String input = recordInput.nextLine();
@@ -288,6 +596,7 @@ class Services {
                 System.out.println("Thank you for your appreciation!");
                 break;
             }
+        Collections.sort(restaurantList, new RestaurantComparator());
     }
 
 
@@ -361,7 +670,7 @@ class Services {
 
 
     // Add new order
-    public void placeNewOrder() throws InterruptedException {
+    public void placeNewOrder(){
         if(currentUser instanceof Customer) {
             Cart userCart = ((Customer) currentUser).getCart();
             float totalPrice = userCart.getCartTotalPrice() + 5;
@@ -386,9 +695,17 @@ class Services {
 
             // Asteptare perioada de preparare
             System.out.println("Please wait. Food in progress....");
-            TimeUnit.SECONDS.sleep(preparationTime-10);
+            try {
+                TimeUnit.SECONDS.sleep(preparationTime-10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("Food is on the way");
-            TimeUnit.SECONDS.sleep(10);
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             System.out.println("Food deliverd");
 
             addOrderHistory(newOrder);
@@ -466,7 +783,7 @@ class Services {
         restaurantList.add(restaurant1);
         restaurantList.add(restaurant2);
         restaurantList.add(restaurant3);
-
+        Collections.sort(restaurantList, new RestaurantComparator());
     }
 
 
