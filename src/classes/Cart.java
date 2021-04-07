@@ -1,18 +1,23 @@
 package classes;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
     private List<CartItem> cartProducts = new ArrayList<>();
+    private String productsFromRestaurantID = null;
 
     public List<CartItem> getCartProducts (){
         return cartProducts;
     }
 
+    public String getProductsFromRestaurantID() {
+        return productsFromRestaurantID;
+    }
+
     // Add product to cart
     // If the product already exists in the cart, then only increase the quantity with the given number
-    public void addProductToCart(Product product, int quantity){
+    public void addProductToCart(Product product, int quantity, String restaurantId){
+        productsFromRestaurantID = restaurantId;
         boolean newProduct = true;
         for (CartItem cartProduct : cartProducts) {
             if (cartProduct.getProduct().getProductId().equals(product.getProductId())){
