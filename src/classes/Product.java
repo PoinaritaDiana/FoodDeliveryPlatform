@@ -49,16 +49,5 @@ abstract public class Product implements IDGenerator {
         return preparationTime;
     }
 
-    @Override
-    public String toString() {
-        return "Product {" +
-                "Product Id=" + productId +
-                ", Product Name='" + productName + '\'' +
-                ", Price=" + price +
-                ", Description='" + description + '\'' +
-                ", Rating=" + rating + "stars" +
-                '}';
-    }
-
 
 }

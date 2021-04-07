@@ -23,7 +23,7 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return String.format("Product %s: %s, Quantity: %d, Total price: %f",product.getProductId(),product.getProductName(), productQuantity,totalItemPrice);
+        return String.format("Product %s: %s, Unit price: %f, \r\n Quantity: %d, Total price: %f",product.getProductId(),product.getProductName(), product.getPrice(),productQuantity,totalItemPrice);
     }
 
     // Change product quantity in cart (and update totalItemPrice)

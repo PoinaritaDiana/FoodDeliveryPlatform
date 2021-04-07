@@ -18,14 +18,10 @@ public class FoodProduct extends Product{
 
     @Override
     public String toString() {
-        return "Food product {" +
-                "Product Id=" + productId +
-                ", Product Name='" + productName + '\'' +
-                ", Price=" + price +
-                ", Preparation time =" + preparationTime +
-                ", Description='" + description + '\'' +
-                ", Rating=" + rating + "stars" + '\''+
-                ", Categories=" + categories + '\''+
-                '}';
+        return "Food Product no." + getProductId() + "\r\n" +
+                "\t Product Name: " + getProductName() + "- price: " + getPrice() + ", rating=" + getRating() + "\r\n" +
+                "\t Description='" + getDescription() + '\'' +  "\r\n" +
+                "\t Preparation time=" + preparationTime + "minutes" +  "\r\n" +
+                "\t Category: " + categories +"\r\n";
     }
 }
