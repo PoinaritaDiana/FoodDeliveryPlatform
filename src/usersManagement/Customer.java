@@ -28,8 +28,13 @@ public class Customer extends User {
 
     // Display the list of all placed orders so far
     public void displayOrdersHistory() {
-        for(Order order: ordersHistoryList)
+        boolean hasOrders = false;
+        for(Order order: ordersHistoryList) {
             System.out.println(order);
+            hasOrders = true;
+        }
+        if(hasOrders == false)
+            System.out.println("You have no orders placed yet");
     }
 
     // Add new order to the list of placed orders

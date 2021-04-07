@@ -17,6 +17,7 @@ public class Menu {
         return beverageProductList;
     }
 
+
     public Menu(Product [] productsList) {
         for(Product product: productsList) {
             if (product instanceof FoodProduct)
@@ -24,8 +25,8 @@ public class Menu {
             else
                 this.beverageProductList.add((BeverageProduct) product);
         }
-
     }
+
 
     public void showMenu(){
         System.out.println("Food:");
@@ -37,6 +38,7 @@ public class Menu {
     }
 
 
+    // Search a product in the menu by name
     public boolean searchProductInMenu(String productName){
         boolean found = false;
         for(FoodProduct product : foodProductList)
@@ -50,6 +52,8 @@ public class Menu {
         return found;
     }
 
+
+    // Search a product in the menu by ID
     public Product searchProductInMenuByID(String productId){
         Product searchedProduct = null;
         for(FoodProduct product : foodProductList)
@@ -67,6 +71,8 @@ public class Menu {
         return searchedProduct;
     }
 
+
+    // Show product in the menu by name
     public void displayProductInMenu(String productName){
         for(FoodProduct product : foodProductList)
             if(product.getProductName().equalsIgnoreCase(productName))

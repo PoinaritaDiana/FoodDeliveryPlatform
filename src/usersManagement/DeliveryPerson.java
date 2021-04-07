@@ -4,16 +4,18 @@ import usersManagement.User;
 
 public class DeliveryPerson extends User {
     private String availabilityStatus;
+    private String carRegistrationNumber;
 
-    public DeliveryPerson(String lastName, String firstName, String phoneNumber, String email, String username, String password) {
+    public DeliveryPerson(String lastName, String firstName, String phoneNumber, String email, String carRegistrationNumber, String username, String password) {
         super(lastName, firstName, phoneNumber, email, username, password);
         this.availabilityStatus = "available";
+        this.carRegistrationNumber = carRegistrationNumber;
     }
 
     // Updates courier status
     public void updateAvailabilityStatus(){
         if(this.availabilityStatus == "available")
-            this.availabilityStatus = "busy";
+            this.availabilityStatus = "on delivery";
         else
             this.availabilityStatus = "available";
     }
