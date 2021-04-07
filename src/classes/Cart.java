@@ -27,6 +27,14 @@ public class Cart {
         }
     }
 
+
+    // Check if cart is empty
+    public boolean isEmpty(){
+        if(cartProducts.size()==0)
+            return true;
+        return false;
+    }
+
     // Show products in cart
     public void showCartItems(){
         if(cartProducts.size()==0)
@@ -37,10 +45,12 @@ public class Cart {
         }
     }
 
+
     // Empty cart
     public void clearCart(){
         cartProducts.clear();
     }
+
 
     // Remove product from cart
     public void removeCartItem(CartItem cartItem){
@@ -57,6 +67,7 @@ public class Cart {
         return totalPrice;
     }
 
+
     // Get total preparation time for cart items
     // Quantity does not matter
     public long getTotalPreparationTime(){
@@ -65,5 +76,4 @@ public class Cart {
             preparationTime += cartProduct.getProduct().getPreparationTime();
         return preparationTime;
     }
-
 }
