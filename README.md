@@ -10,6 +10,7 @@ Objects that are defined on the platform:
 - Order
 - Services
 - Comparator -> OrderComparator, ProductComparator, RestaurantComparator
+- IDGenerator -> interface with generateID function implemented, which provides a Universally Unique Identifier for users, products and restaurants (as a String)
 
 
 #### 1. USER, CUSTOMER and DELIVERYPERSON classes ####
