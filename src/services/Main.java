@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
-
         // Get services
         Services services = Services.getServicesInstance();
 
