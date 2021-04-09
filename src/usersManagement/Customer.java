@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 // Class that extends the user base class, representing the consumer/customer
-// Each customer has a list of orders placed (in ascending order according to the date they were placed)
+// Each customer has a list of orders placed (in descending order according to the date they were placed)
 // and a shopping cart, where the user can add different products
 
 public class Customer extends User {

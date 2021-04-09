@@ -36,12 +36,8 @@ final class Services {
     private Services(){
         // Load data (for testing functionality only)
         databaseInitialization();
-
         // Test data
         testData();
-
-        // Display Welcome Message
-        displayWelcomeMessage();
     }
 
     // Check if user is logged in
@@ -50,7 +46,7 @@ final class Services {
     }
 
     // Display the message that the user receives the first time he enters the application
-    private void displayWelcomeMessage(){
+    public void displayWelcomeMessage(){
         System.out.println("---------------------------------");
         System.out.println("WELCOME TO DeliverEAT");
         System.out.println("You have to log in first!");
@@ -69,18 +65,19 @@ final class Services {
             System.out.println("------- CUSTOMERS-----");
             testCustomersList();
             System.out.println("CURRENT USER: " + currentUser);
-
-            if(currentUser instanceof Customer)
-                // Print available options for customer
-                displayCustomerOptions();
-            else
-                displayDeliveryOptions();
         }
         else{
             System.out.println("You have to log in first!");
         }
     }
 
+    public void displayUserOptions(){
+        if(currentUser instanceof Customer)
+            // Print available options for customer
+            displayCustomerOptions();
+        else
+            displayDeliveryOptions();
+    }
 
     public void userInterface(String userOption) {
         if (currentUser instanceof Customer) {

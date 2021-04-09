@@ -10,13 +10,6 @@ public class Menu {
     private Set <FoodProduct> foodProductList= new TreeSet<>(new ProductComparator());
     private Set <BeverageProduct>  beverageProductList= new TreeSet<>(new ProductComparator());
 
-    public Set <FoodProduct> getFoodProductList() {
-        return foodProductList;
-    }
-    public Set <BeverageProduct> getBeverageProductList() {
-        return beverageProductList;
-    }
-
 
     public Menu(Product [] productsList) {
         for(Product product: productsList) {
