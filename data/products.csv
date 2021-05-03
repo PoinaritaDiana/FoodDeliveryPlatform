@@ -1,0 +1,15 @@
+FP1,Cartofi,cartofi prajiti,5,10,55.0,fast food,R1
+BP2,Apa,apa plata,2,0,0,false,cold,R1
+FP3,Paste,paste carbonara,25,20,9,italian,R2
+BP4,Suc,suc de portocale,5,0,1,false,cold,R3
+FP5,Burger,burger de vita,30,20,10,fast food,R2
+BP6,Red Bull,energizant,10,0,3,false,cold,R2
+FP7,Pizza Pollo,ciuperci sunca trufe,28.5,20,8,pizza,R3
+BP8,Vin Chardonnay,vin alb sec,59,0,10,true,cold,R1
+FP9,Supa crema de ciuperci,ciuperci Chapignon crutoane,11,15,8.5,post,R4
+FP10,Quesadilla de pui,tortilla pui ardei sos cartofi,34,20,9.2,mexican,R4
+FP11,Aripioare de pui,aripioare picante Black Mass,30,25,10,traditional,R3
+BP12,Sommersby Apple,cidru 4.5%,7,0,5,true,cold,R5
+FP13,Salata greceasca,feta rosii castravete masline,20,15,7.5,vegan,R4
+BP14,Ciocolata calda,ciocolata calda neagra,6,10,6,false,hot,R5
+FP15,Paste,paste zucchini,27,17,9,vegan,R1
