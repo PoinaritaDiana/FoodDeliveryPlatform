@@ -1,11 +1,6 @@
 package classes;
 
-import auxiliar.IDGenerator;
-
-import java.util.List;
-import java.util.Map;
-
-public class Restaurant implements IDGenerator {
+public class Restaurant{
     private String restaurantId;
     private String restaurantName;
     private String restaurantAddress;
@@ -16,8 +11,8 @@ public class Restaurant implements IDGenerator {
     private Menu menu;
 
 
-    public Restaurant(String restaurantName, String restaurantAddress, String restaurantType, String phoneNumber, float rating, float deliveryPrice, Menu menu) {
-        this.restaurantId = generateID();
+    public Restaurant(String restaurantID, String restaurantName, String restaurantAddress, String restaurantType, String phoneNumber, float rating, float deliveryPrice, Menu menu) {
+        this.restaurantId = restaurantID;
         this.restaurantName = restaurantName;
         this.restaurantAddress = restaurantAddress;
         this.restaurantType = restaurantType;

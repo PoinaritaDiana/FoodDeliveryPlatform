@@ -54,6 +54,7 @@ public class Cart {
     // Empty cart
     public void clearCart(){
         cartProducts.clear();
+        productsFromRestaurantID = null;
     }
 
 

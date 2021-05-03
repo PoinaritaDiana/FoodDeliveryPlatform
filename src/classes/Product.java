@@ -1,10 +1,8 @@
 package classes;
 
-import auxiliar.IDGenerator;
+import services.Database;
 
-import java.util.Set;
-
-abstract public class Product implements IDGenerator {
+abstract public class Product{
     protected String productId;
     protected String productName;
     protected float price;
@@ -12,11 +10,11 @@ abstract public class Product implements IDGenerator {
     protected float rating;
     protected float preparationTime;
 
-    public Product(String name, String description, float price, float preparationTime){
-        this.productId = generateID();
+    public Product(String productID,String name, String description, float price, float preparationTime,float rating){
+        this.productId = productID;
         this.productName = name;
         this.description = description;
-        this.rating = 0 ;
+        this.rating = rating ;
         this.price = price;
         this.preparationTime = preparationTime;
     }

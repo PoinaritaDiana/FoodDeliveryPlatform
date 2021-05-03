@@ -16,10 +16,11 @@ public class Customer extends User {
     private Set <Order> ordersHistoryList = new TreeSet<>(new OrderComparator());
     private Cart cart;
 
-    public Customer(String lastName, String firstName, String phoneNumber, String email, String username, String password) {
-        super(lastName, firstName, phoneNumber, email, username, password);
+    public Customer(String userID,String lastName, String firstName, String phoneNumber, String email, String username, String password) {
+        super(userID, lastName, firstName, phoneNumber, email, username, password);
         cart = new Cart();
     }
+
 
     //Get user's cart
     public Cart getCart() {
@@ -45,5 +46,10 @@ public class Customer extends User {
     @Override
     public String toString() {
         return String.format("Customer %s : %s %s",getUserId(), getLastName(), getFirstName());
+    }
+
+    public String[] getObjectData(){
+        String[] objectData = {userId,lastName, firstName, phoneNumber, email, username, password};
+        return objectData;
     }
 }

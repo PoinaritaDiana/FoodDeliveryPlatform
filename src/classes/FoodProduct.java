@@ -4,16 +4,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class FoodProduct extends Product{
-    private Set<String> categories = new HashSet<>();
+    private String category ;
 
-    public FoodProduct(String name, String description, float price, float preparationTime,String[] categories){
-        super(name,description,price, preparationTime);
-        for(String category: categories)
-            this.categories.add(category);
-    }
-
-    public Set<String> getCategories() {
-        return categories;
+    public FoodProduct(String productID,String name, String description, float price, float rating,float preparationTime,String category){
+        super(productID,name,description,price, rating,preparationTime);
+        this.category = category;
     }
 
     @Override
@@ -22,6 +17,6 @@ public class FoodProduct extends Product{
                 "\t Product Name: " + getProductName() + "- price: " + getPrice() + ", rating=" + getRating() + "\r\n" +
                 "\t Description='" + getDescription() + '\'' +  "\r\n" +
                 "\t Preparation time=" + preparationTime + "minutes" +  "\r\n" +
-                "\t Category: " + categories +"\r\n";
+                "\t Category: " + category +"\r\n";
     }
 }

@@ -31,4 +31,9 @@ public class CartItem {
         this.productQuantity += quantity;
         this.totalItemPrice += product.getPrice() * quantity;
     }
+
+    public String[] getObjectData(String orderID){
+        String[] objectData = {product.getProductId(),String.valueOf(productQuantity), orderID};
+        return objectData;
+    }
 }

@@ -2,6 +2,7 @@ package classes;
 import auxiliar.Pair;
 import auxiliar.ProductComparator;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -11,7 +12,7 @@ public class Menu {
     private Set <BeverageProduct>  beverageProductList= new TreeSet<>(new ProductComparator());
 
 
-    public Menu(Product [] productsList) {
+    public Menu(List<Product> productsList) {
         for(Product product: productsList) {
             if (product instanceof FoodProduct)
                 this.foodProductList.add((FoodProduct) product);

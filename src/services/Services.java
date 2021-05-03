@@ -5,11 +5,11 @@ import classes.*;
 import usersManagement.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 final class Services {
@@ -23,6 +23,9 @@ final class Services {
     // If currentUser == null, then there is no user logged in
     private User currentUser = null;
 
+    Database database = Database.getDatabaseInstance();
+    Audit audit = Audit.getAuditInstance();
+
 
     // Get Services instance (singleton)
     public static Services getServicesInstance(){
@@ -35,7 +38,7 @@ final class Services {
     // Private constructor
     private Services(){
         // Load data (for testing functionality only)
-        databaseInitialization();
+        loadData();
         // Test data
         testData();
     }
@@ -62,8 +65,6 @@ final class Services {
 
         if(currentUser!=null) {
             // Test registration of new user and currentUser
-            System.out.println("------- CUSTOMERS-----");
-            testCustomersList();
             System.out.println("CURRENT USER: " + currentUser);
         }
         else{
@@ -110,11 +111,13 @@ final class Services {
                     break;
                 }
                 case "4": {
+                    audit.auditService("showAllRestaurants");
                     System.out.println("See our restaurant:");
                     showAllRestaurants();
                     break;
                 }
                 case "5": {
+                    audit.auditService("searchRestaurant");
                     System.out.println("Enter name of the restaurant:");
                     Scanner nameInput = new Scanner(System.in);
                     String restaurantName = nameInput.nextLine();
@@ -131,11 +134,13 @@ final class Services {
                         Scanner ratingInput = new Scanner(System.in);
                         float newRating = Float.parseFloat(ratingInput.nextLine());
                         addRestaurantRating(searchedRestaurant.getRestaurantId(), newRating);
+                        audit.auditService("addRestaurantRating");
                     } else
                         System.out.println(String.format("No result for \"%s\".Try again.", restaurantName));
                     break;
                 }
                 case "7": {
+                    audit.auditService("showRestaurantMenu");
                     System.out.println("Enter name of the restaurant:");
                     Scanner nameInput = new Scanner(System.in);
                     String restaurantName = nameInput.nextLine();
@@ -156,12 +161,14 @@ final class Services {
                         Scanner ratingInput = new Scanner(System.in);
                         float newRating = Float.parseFloat(ratingInput.nextLine());
                         addRatingToProduct(product, newRating);
+                        audit.auditService("addRatingToProduct");
                     } else {
                         System.out.println("We're sorry. This product does not exist :(");
                     }
                     break;
                 }
                 case "9": {
+                    audit.auditService("searchProductInRestaurant");
                     Scanner nameInput = new Scanner(System.in);
                     System.out.println("Enter name of the product:");
                     String productName = nameInput.nextLine();
@@ -176,6 +183,7 @@ final class Services {
                     break;
                 }
                 case "10": {
+                    audit.auditService("searchProductInRestaurants");
                     System.out.println("Enter name of the product:");
                     Scanner nameInput = new Scanner(System.in);
                     String productName = nameInput.nextLine();
@@ -184,13 +192,16 @@ final class Services {
                 }
                 case "11": {
                     placeNewOrder();
+                    audit.auditService("placeNewOrder");
                     break;
                 }
                 case "12": {
+                    audit.auditService("showOrderHistory");
                     showOrderHistory();
                     break;
                 }
                 case "13": {
+                    audit.auditService("addProductInMyCart");
                     System.out.println("Add product to your cart by productID: ");
                     Scanner productIdInput = new Scanner(System.in);
                     // Get product by id
@@ -209,14 +220,17 @@ final class Services {
                     break;
                 }
                 case "14": {
+                    audit.auditService("showProductsMyCart");
                     showProductsMyCart();
                     break;
                 }
                 case "15": {
+                    audit.auditService("clearMyCart");
                     clearMyCart();
                     break;
                 }
                 case "16": {
+                    audit.auditService("removeProductFromCart");
                     System.out.println("Remove product from your cart by productID: ");
                     Scanner productIdInput = new Scanner(System.in);
                     CartItem cartItem = getCartItemByProductID(productIdInput.nextLine());
@@ -227,6 +241,7 @@ final class Services {
                     break;
                 }
                 case "17": {
+                    audit.auditService("decreaseProductQuantity");
                     System.out.println("Remove product from your cart by productID: ");
                     Scanner productIdInput = new Scanner(System.in);
                     CartItem cartItem = getCartItemByProductID(productIdInput.nextLine());
@@ -250,6 +265,7 @@ final class Services {
                 }
                 case "18": {
                     displayCustomerOptions();
+                    audit.auditService("displayCustomerOptions");
                     break;
                 }
                 case "19": {
@@ -283,6 +299,7 @@ final class Services {
                     break;
                 }
                 case "4": {
+                    audit.auditService("displayDeliveryOptions");
                     displayDeliveryOptions();
                     break;
                 }
@@ -437,6 +454,7 @@ final class Services {
 
     // Log out function
     public void logOut(){
+        audit.auditService("logOut");
         System.out.println("Logged out");
         currentUser = null;
     }
@@ -466,6 +484,7 @@ final class Services {
                 if (existCustomer && correctPassword) {
                     currentUser = getCustomer(username);
                     System.out.println(String.format("Welcome back, %s %s", currentUser.getLastName(), currentUser.getFirstName()));
+                    audit.auditService("userAuthentication");
                     break;
                 } else {
                     // Username does not exist, need to register or try again
@@ -510,6 +529,7 @@ final class Services {
                     if (existDelivery && correctPassword) {
                         currentUser = getDeliveryPerson(username);
                         System.out.println(String.format("Welcome back, %s %s", currentUser.getLastName(), currentUser.getFirstName()));
+                        audit.auditService("userAuthentication");
                         break;
                     } else {
                         // Username does not exist, need to register or try again
@@ -570,13 +590,23 @@ final class Services {
                 String email = recordInput.nextLine();
                 System.out.println("Username: ");
                 String username = recordInput.nextLine();
+                while (!(getCustomer(username)==null && getDeliveryPerson(username)==null)){
+                    System.out.println("Username already exists. Try again");
+                    System.out.println("Username: ");
+                    username = recordInput.nextLine();
+                }
+
                 System.out.println("Password: ");
                 String password = recordInput.nextLine();
 
                 // Account for new customer
                 if(userType == 1){
-                    Customer newCustomer = new Customer(lastName, firstName, phoneNumber, email, username, password);
+                    Customer newCustomer = new Customer(User.generateID("C"),lastName, firstName, phoneNumber, email, username, password);
                     customersList.add(newCustomer);
+
+                    audit.auditService("userRegistration");
+                    Database.writeDataToCsv("customers.csv",newCustomer.getObjectData());
+
                     System.out.println("Redirecting to Log In page...");
                     try {
                         Thread.sleep(3000);
@@ -590,8 +620,12 @@ final class Services {
                 else{
                     System.out.println("Car registration number: ");
                     String carRegistrationNumber = recordInput.nextLine();
-                    DeliveryPerson newDeliveryPerson = new DeliveryPerson(lastName, firstName, phoneNumber, email,carRegistrationNumber, username, password);
+                    DeliveryPerson newDeliveryPerson = new DeliveryPerson(User.generateID("D"),lastName, firstName, phoneNumber, email,carRegistrationNumber, username, password);
                     deliveryPeopleList.add(newDeliveryPerson);
+
+                    audit.auditService("userRegistration");
+                    Database.writeDataToCsv("deliveryPeople.csv",newDeliveryPerson.getObjectData());
+
                     System.out.println("Redirecting to Log In page...");
                     try {
                         Thread.sleep(3000);
@@ -633,6 +667,8 @@ final class Services {
         else
             deliveryPeopleList.remove(deliveryPeopleList.indexOf(currentUser));
         System.out.println("Account deleted");
+        audit.auditService("deleteAccount");
+        Database.removeUserFromCsv(currentUser.getUserId());
         currentUser = null;
     }
 
@@ -665,8 +701,10 @@ final class Services {
             if(restaurant.getRestaurantId().equals(restaurantId)) {
                 restaurant.addRestaurantRating(newRating);
                 System.out.println("Thank you for your appreciation!");
+                Database.updateCsv("restaurants.csv", restaurantId,restaurant.getRating());
                 break;
             }
+
         Collections.sort(restaurantList, new RestaurantComparator());
     }
 
@@ -738,6 +776,7 @@ final class Services {
     // Add rating to a product
     public void addRatingToProduct(Product product, float rating){
         product.updateRating(rating);
+        Database.updateCsv("products.csv", product.getProductId(),product.getRating());
     }
 
     // Show menu for given restaurant
@@ -765,8 +804,8 @@ final class Services {
             }
         if(noRestaurant == true)
             System.out.println("The product does not exist in any restaurant");
-
     }
+
 
     // Get restaurant id where you can find given product
     public String getRestaurantIdFromProduct(Product product){
@@ -828,7 +867,15 @@ final class Services {
                 String checkOutInput = checkOut.nextLine();
 
                 if("yes".equalsIgnoreCase(checkOutInput)) {
-                    Order newOrder = new Order(clientId, deliveryPersonId, cartProducts, totalPrice+deliveryPrice, payment, deliveryAddress, preparationTime);
+                    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    Order newOrder = new Order(Order.generateID(),clientId, deliveryPersonId, totalPrice+deliveryPrice,
+                            payment, deliveryAddress, preparationTime, LocalDateTime.now().format(dateFormat), cartProducts);
+
+                    // Write data in csv
+                    Database.writeDataToCsv("orders.csv", newOrder.getObjectData());
+                    cartProducts.stream().forEach(cartItem -> Database.writeDataToCsv("cartItems.csv", cartItem.getObjectData(newOrder.getOrderId())));
+
+
                     userCart.clearCart();
                     // Wait preparation time
                     System.out.println("Please wait. Your order will be ready in about " + (preparationTime - 10) + " minutes");
@@ -887,10 +934,104 @@ final class Services {
 
 
 
+    // ------------ DATABASE/ INITIALIZATION --------------
+    private void loadData() {
+        String [] csvFiles = {"deliveryPeople.csv", "customers.csv","cartItems.csv", "orders.csv", "products.csv", "restaurants.csv"};
+
+        // Load delivery People
+        List<String []> data = database.readDataFromCsv(csvFiles[0]);
+        deliveryPeopleList = data.stream()
+                                 .map(object -> new DeliveryPerson(object[0],object[1], object[2], object[3], object[4],object[5],object[6],object[7]))
+                                 .collect(Collectors.toList());
+
+        // Load customers
+        data = database.readDataFromCsv(csvFiles[1]);
+        customersList = data.stream()
+                            .map(object -> new Customer(object[0],object[1], object[2], object[3], object[4],object[5],object[6]))
+                            .collect(Collectors.toList());
+
+        // Get last ID from deliveryPeople and last ID from customers and set next ID for new user
+        int lastDeliveryPeopleID = Integer.parseInt(deliveryPeopleList.get(deliveryPeopleList.size()-1).getUserId().substring(1));
+        int lastCustomersID = Integer.parseInt(customersList.get(customersList.size()-1).getUserId().substring(1));
+        User.setLastUserId(Math.max(lastDeliveryPeopleID,lastCustomersID));
+        User.setLastUserId(Math.max(lastDeliveryPeopleID,lastCustomersID));
 
 
-    // ------------ ADD DATA --------------
-    private void databaseInitialization(){
+        // Load products - grouping by restaurantId
+        data = database.readDataFromCsv(csvFiles[4]);
+        Map<String,List<String[]>> productsByRestaurant = data.stream()
+                .collect(Collectors.groupingBy(object -> object[object.length-1]));
+
+        // Create menu (list of products) for each restaurant
+        Map<String, List<Product>> menuByRestaurant = new HashMap<>();
+        for(Map.Entry<String,List<String[]>> entry: productsByRestaurant.entrySet()){
+            menuByRestaurant.put(entry.getKey(), new ArrayList<Product>());
+            for(String[] product: entry.getValue()){
+                if(product[0].charAt(0)=='F')
+                    menuByRestaurant.get(entry.getKey()).add(new FoodProduct(product[0],product[1], product[2], Float.parseFloat(product[3]),
+                            Float.parseFloat(product[4]), Float.parseFloat(product[5]),product[6]));
+                else
+                    menuByRestaurant.get(entry.getKey()).add(new BeverageProduct(product[0],product[1], product[2], Float.parseFloat(product[3]),
+                            Float.parseFloat(product[4]), Float.parseFloat(product[5]),Boolean.parseBoolean(product[6]),product[7]));
+            }
+        }
+
+
+        // Load restaurants
+        data = database.readDataFromCsv(csvFiles[5]);
+        for(String[] restaurant : data)
+            restaurantList.add(new Restaurant(restaurant[0],restaurant[1], restaurant[2], restaurant[3], restaurant[4],
+                    Float.parseFloat(restaurant[5]),Float.parseFloat(restaurant[6]), new Menu(menuByRestaurant.get(restaurant[0]))));
+
+        // Sort restaurants by rating
+        Collections.sort(restaurantList, new RestaurantComparator());
+
+
+
+        // Load cartItems - grouping by orderId
+        data = database.readDataFromCsv(csvFiles[2]);
+        Map<String,List<String[]>> cartItemsByOrder = data.stream()
+                        .collect(Collectors.groupingBy(object -> object[object.length-1]));
+
+
+        // LOad orders - grouping by clientID
+        data = database.readDataFromCsv(csvFiles[3]);
+        Map<String,List<String[]>> ordersByClient = data.stream()
+                .collect(Collectors.groupingBy(object -> object[1]));
+
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        // Last id for orders
+        int lastOrderId = 0;
+
+        // Add cartItems in order, add order to customer orderHistoryList
+        for(Map.Entry<String,List<String[]>> entry: ordersByClient.entrySet()){
+            String customerID = entry.getKey();
+
+            for(String[] order: entry.getValue()){
+                String orderID = order[0];
+                lastOrderId = Math.max(lastOrderId, Integer.parseInt(orderID.substring(3)));
+
+                // cartItems list for current order
+                List<CartItem> orderItems = new ArrayList<>();
+                for(String[] cartItem: cartItemsByOrder.get(orderID))
+                    orderItems.add(new CartItem(getProductById(cartItem[0]),Integer.parseInt(cartItem[1])));
+
+                // Add current order to customer's list
+                for(Customer customer: customersList)
+                    if(customer.getUserId().equals(customerID))
+                        customer.addOrderHistoryList((new Order(order[0],order[1], order[2], Float.parseFloat(order[3]), order[4],order[5],
+                                Float.parseFloat(order[6]), order[7],orderItems)));
+            }
+        }
+
+        // Set next ID for orders
+        Order.setLastOrderId(lastOrderId);
+    }
+
+
+/*    private void databaseInitialization(){
         //Customers
         Customer customer1 =  new Customer("Poinarita","Diana","0123456789",
                 "poinaritadiana@fmi.ro", "dianap", "password123");
@@ -933,7 +1074,7 @@ final class Services {
         restaurantList.add(restaurant2);
         restaurantList.add(restaurant3);
         Collections.sort(restaurantList, new RestaurantComparator());
-    }
+    }*/
 
 
     // Private methods for testing data

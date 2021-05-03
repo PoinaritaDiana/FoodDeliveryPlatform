@@ -1,19 +1,18 @@
 package usersManagement;
 
-import auxiliar.IDGenerator;
-
 // Abstract class for users, which can be of two types: customers and delivery person
-abstract public class User implements IDGenerator {
-    private String userId;
-    private String lastName;
-    private String firstName;
-    private String phoneNumber;
-    private String email;
-    private String username;
-    private String password;
+abstract public class User{
+    private static int lastUserId;
+    protected String userId;
+    protected String lastName;
+    protected String firstName;
+    protected String phoneNumber;
+    protected String email;
+    protected String username;
+    protected String password;
 
-    public User(String lastName, String firstName, String phoneNumber, String email, String username, String password) {
-        this.userId = generateID();
+    public User(String userID,String lastName, String firstName, String phoneNumber, String email, String username, String password) {
+        this.userId = userID;
         this.lastName = lastName;
         this.firstName = firstName;
         this.phoneNumber = phoneNumber;
@@ -41,5 +40,15 @@ abstract public class User implements IDGenerator {
     @Override
     public String toString(){
         return String.format("User %d : %s %s",userId,lastName, firstName);
+    }
+
+
+    public static void setLastUserId(int userID){
+        lastUserId = userID;
+    }
+
+    public static String generateID(String type){
+        lastUserId +=1;
+        return String.format(type + String.valueOf(lastUserId));
     }
 }
