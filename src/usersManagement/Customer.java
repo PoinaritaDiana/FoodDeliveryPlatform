@@ -1,10 +1,8 @@
 package usersManagement;
 
 import auxiliar.OrderComparator;
-import classes.Cart;
-import classes.Order;
-import usersManagement.User;
-
+import models.Cart;
+import models.Order;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,10 +20,14 @@ public class Customer extends User {
     }
 
 
-    //Get user's cart
+    public Set<Order> getOrdersHistoryList() {
+        return ordersHistoryList;
+    }
+
     public Cart getCart() {
         return cart;
     }
+
 
     // Display the list of all placed orders so far
     public void displayOrdersHistory() {

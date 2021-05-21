@@ -1,7 +1,5 @@
 package usersManagement;
 
-import usersManagement.User;
-
 public class DeliveryPerson extends User {
     private String availabilityStatus;
     private String carRegistrationNumber;

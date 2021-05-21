@@ -51,4 +51,13 @@ abstract public class User{
         lastUserId +=1;
         return String.format(type + String.valueOf(lastUserId));
     }
+
+    public void update(String[] userData) {
+        this.lastName = userData[0];
+        this.firstName = userData[1];
+        this.phoneNumber = userData[2];
+        this.email = userData[3];
+        this.username = userData[4];
+        this.password = userData[5];
+    }
 }

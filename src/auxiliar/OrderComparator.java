@@ -1,6 +1,6 @@
 package auxiliar;
 
-import classes.Order;
+import models.Order;
 
 import java.util.Comparator;
 

@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Fri May 21 18:05:45 GMT+02:00 2021:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0179-8fac-ee7a-00000e8ac0e0 
+on database directory D:\AN2_SEM2\PAO\FoodDeliveryPlatform\deliverEatDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@3764951d 
+Loaded from file:/C:/Users/Depanero/Downloads/db-derby-10.15.2.0-lib/lib/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=15.0.2+7-27
+user.dir=D:\AN2_SEM2\PAO\FoodDeliveryPlatform
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

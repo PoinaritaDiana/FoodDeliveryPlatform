@@ -1,6 +1,6 @@
 package auxiliar;
 
-import classes.Restaurant;
+import models.Restaurant;
 
 import java.util.Comparator;
 
