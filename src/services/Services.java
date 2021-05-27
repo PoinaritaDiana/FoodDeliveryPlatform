@@ -1450,28 +1450,35 @@ final public class Services {
         JOptionPane.showMessageDialog(null, "Please wait. Your order will be ready in about " + (preparationTime - 10) + " minutes",
                 "Order status", JOptionPane.INFORMATION_MESSAGE);
         System.out.println("Please wait. Your order will be ready in about " + (preparationTime - 10) + " minutes");
-        try {
-            TimeUnit.SECONDS.sleep(preparationTime - 10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        JOptionPane.showMessageDialog(null, "Food is on the way! You will be happy in 10 minutes!",
-                "Order status", JOptionPane.INFORMATION_MESSAGE);
-        System.out.println("Food is on the way! You will be happy in 10 minutes!");
-        try { TimeUnit.SECONDS.sleep(10);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        String finalDeliveryPersonId = deliveryPersonId;
+        Thread orderThread = new Thread(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(preparationTime - 10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        JOptionPane.showMessageDialog(null, "Food delivered! Enjoy!",
-                "Order status", JOptionPane.INFORMATION_MESSAGE);
-        System.out.println("Food delivered! Enjoy!");
+            JOptionPane.showMessageDialog(null, "Food is on the way! You will be happy in 10 minutes!",
+                    "Order status", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("Food is on the way! You will be happy in 10 minutes!");
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-        addOrderHistory(newOrder);
-        for (DeliveryPerson deliveryPerson : deliveryPeopleList)
-            if (deliveryPerson.getUserId() == deliveryPersonId)
-                deliveryPerson.updateAvailabilityStatus();
+            JOptionPane.showMessageDialog(null, "Food delivered! Enjoy!",
+                    "Order status", JOptionPane.INFORMATION_MESSAGE);
+            System.out.println("Food delivered! Enjoy!");
+
+            addOrderHistory(newOrder);
+            for (DeliveryPerson deliveryPerson : deliveryPeopleList)
+                if (deliveryPerson.getUserId() == finalDeliveryPersonId)
+                    deliveryPerson.updateAvailabilityStatus();
+        });
+
+        orderThread.start();
     }
 
 

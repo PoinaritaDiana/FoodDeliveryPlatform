@@ -43,7 +43,7 @@ public class OrderHistoryScreen extends JFrame {
 
         Customer currentUser = (Customer) services.getCurrentUser();
         java.util.Set<Order> userOrders = currentUser.getOrdersHistoryList();
-        if(userOrders==null){
+        if(userOrders.isEmpty()){
             JLabel noOrdersLabel = new JLabel("You have no orders placed yet",JLabel.CENTER);
             ordersPanel.add(noOrdersLabel, BorderLayout.CENTER);
         }

@@ -108,7 +108,6 @@ public class CartScreen extends JFrame {
                 JOptionPane.showMessageDialog(getRootPane(), "Your cart is empty", "Place Order", JOptionPane.WARNING_MESSAGE);
             }
             else {
-                System.out.println("Afafad");
                 newOrderPanel.setVisible(true);
                 orderPanel.setVisible(true);
             }

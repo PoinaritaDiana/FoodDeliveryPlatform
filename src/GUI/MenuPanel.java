@@ -29,7 +29,7 @@ public class MenuPanel extends JPanel {
         topPanel.add(labelTitle, BorderLayout.NORTH);
 
         JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new FlowLayout());
+        searchPanel.setLayout(new GridLayout(3,2));
         searchText =  new JTextField("" ,20);
         clearSearchButton = new JButton("Clear search");
         clearSearchButton.addActionListener(e -> {
@@ -67,8 +67,11 @@ public class MenuPanel extends JPanel {
                 JOptionPane.showMessageDialog(getRootPane(), "Enter the name of the product to search", "Alert", JOptionPane.WARNING_MESSAGE);
             }
         });
+        searchPanel.add(new JLabel(""));
+        searchPanel.add(new JLabel(""));
         searchPanel.add(searchText);
         searchPanel.add(searchButton);
+        searchPanel.add(new JLabel(""));
         searchPanel.add(clearSearchButton);
         topPanel.add(searchPanel, BorderLayout.CENTER);
         add(topPanel, BorderLayout.NORTH);

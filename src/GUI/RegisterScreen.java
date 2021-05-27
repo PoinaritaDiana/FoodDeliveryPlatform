@@ -52,13 +52,13 @@ public class RegisterScreen extends JFrame {
         firstNameTextField.setBounds(220, 160, 200, 30);
         add(firstNameTextField);
 
-        JTextField emailTextField = new JTextField();
-        emailTextField.setBounds(220, 200, 200, 30);
-        add(emailTextField);
-
         JTextField phoneTextField = new JTextField();
-        phoneTextField.setBounds(220, 240, 200, 30);
+        phoneTextField.setBounds(220, 200, 200, 30);
         add(phoneTextField);
+
+        JTextField emailTextField = new JTextField();
+        emailTextField.setBounds(220, 240, 200, 30);
+        add(emailTextField);
 
         JTextField usernameTextField = new JTextField();
         usernameTextField.setBounds(220, 280, 200, 30);

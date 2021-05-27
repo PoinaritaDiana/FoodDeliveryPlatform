@@ -72,18 +72,18 @@ public final class Database implements AutoCloseable{
         if (databaseTablesName.size() != 7){
             HashMap<String, String> tableStatements = new HashMap<>();
             tableStatements.put("restaurants", "CREATE TABLE restaurants (id varchar(36) primary key, name varchar(50), address varchar(200), " +
-                    "type varchar(30), phonenumber varchar(11), rating varchar(10), deliveryPrice varchar(10))");
+                    "type varchar(30), phonenumber varchar(11), rating float(2), deliveryPrice float(2))");
             tableStatements.put("orders", "CREATE TABLE orders (id varchar(36) primary key, clientId varchar(50), deliveryPersonId varchar(50), " +
-                    "totalPrice varchar(50), payment varchar(10), deliveryAddress varchar(200), preparationTime varchar(50), createTime varchar(100))");
+                    "totalPrice float(2), payment varchar(10), deliveryAddress varchar(200), preparationTime float(2), createTime varchar(100))");
             tableStatements.put("customers", "CREATE TABLE customers (id varchar(36) primary key, lastName varchar(50), firstName varchar(50), " +
                     "phoneNumber varchar(11), email varchar(30), username varchar(20), password varchar(30))");
             tableStatements.put("delivery_people", "CREATE TABLE delivery_people (id varchar(36) primary key, lastName varchar(50), firstName varchar(50), " +
                     "phoneNumber varchar(11), email varchar(30), car varchar(10), username varchar(20), password varchar(30))");
             tableStatements.put("food_products", "CREATE TABLE food_products (id varchar(36) primary key, name varchar(50), description varchar(200), " +
-                    "price varchar(50), rating varchar(50), preparationTime varchar(50), category varchar(100), restaurantId varchar(36))");
+                    "price float(2), rating float(2), preparationTime float(2), category varchar(100), restaurantId varchar(36))");
             tableStatements.put("beverage_products", "CREATE TABLE beverage_products (id varchar(36) primary key, name varchar(50), description varchar(200), " +
-                    "price varchar(50), rating varchar(50), preparationTime varchar(50), alcoholic varchar(50), type varchar(50), restaurantId varchar(36))");
-            tableStatements.put("cart_items", "CREATE TABLE cart_items (productId varchar(36), productQuantity varchar(50), orderId varchar(36))");
+                    "price float(2), rating float(2), preparationTime float(50), alcoholic varchar(50), type varchar(50), restaurantId varchar(36))");
+            tableStatements.put("cart_items", "CREATE TABLE cart_items (productId varchar(36), productQuantity int, orderId varchar(36))");
 
             for(Map.Entry<String, String> table : tableStatements.entrySet()) {
                 boolean found = databaseTablesName.contains(table.getKey());
@@ -187,8 +187,10 @@ public final class Database implements AutoCloseable{
                 Float.parseFloat(restaurant[5]),Float.parseFloat(restaurant[6]));
         PreparedStatement statement = connection.prepareStatement("INSERT INTO restaurants VALUES (?,?,?,?,?,?,?)");
 
-        for(int parameterIndex = 1; parameterIndex<=7; parameterIndex++ )
+        for(int parameterIndex = 1; parameterIndex<=5; parameterIndex++ )
             statement.setString(parameterIndex,restaurant[parameterIndex-1]);
+        statement.setFloat(6,Float.parseFloat(restaurant[5]));
+        statement.setFloat(7,Float.parseFloat(restaurant[6]));
         if(statement.executeUpdate() == 1)
             return newRestaurant;
         return null;
@@ -206,8 +208,10 @@ public final class Database implements AutoCloseable{
 
     public boolean updateRestaurant(String id, String[] object) throws Exception {
         PreparedStatement statement = connection.prepareStatement("UPDATE restaurants SET name = ?, address = ?, type = ?, phonenumber = ?, rating = ?, deliveryPrice = ? WHERE id = ?");
-        for(int parameterIndex = 1; parameterIndex<=6; parameterIndex++ )
+        for(int parameterIndex = 1; parameterIndex<=4; parameterIndex++ )
             statement.setString(parameterIndex,object[parameterIndex-1]);
+        statement.setFloat(5,Float.parseFloat(object[4]));
+        statement.setFloat(6,Float.parseFloat(object[5]));
         statement.setString(7,id);
         return statement.executeUpdate() == 1;
     }
@@ -227,7 +231,10 @@ public final class Database implements AutoCloseable{
         PreparedStatement statement = connection.prepareStatement("INSERT INTO orders VALUES (?,?,?,?,?,?,?,?)");
 
         for(int parameterIndex = 1; parameterIndex<=8; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 4 ||  parameterIndex == 7 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
 
         if(statement.executeUpdate() == 1)
             return newOrder;
@@ -249,7 +256,10 @@ public final class Database implements AutoCloseable{
                 "totalPrice = ?, payment = ?,  deliveryAddress = ?, preparationTime = ?, createTime = ? WHERE id = ?");
 
         for(int parameterIndex = 1; parameterIndex<=7; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 3 ||  parameterIndex == 6 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
         statement.setString(8,id);
         return statement.executeUpdate() == 1;
     }
@@ -267,7 +277,7 @@ public final class Database implements AutoCloseable{
         ResultSet results = connection.createStatement().executeQuery("SELECT * FROM cart_items");
         List<String[]> cartItems = new ArrayList<>();
         while(results.next()) {
-            String [] cartItem = {results.getString(1), results.getString(2), results.getString(3)};
+            String [] cartItem = {results.getString(1), String.valueOf(results.getInt(2)), results.getString(3)};
             cartItems.add(cartItem);
         }
         return cartItems;
@@ -275,8 +285,9 @@ public final class Database implements AutoCloseable{
 
     public void createCartItem(String[] object) throws Exception {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO cart_items VALUES (?,?,?)");
-        for(int parameterIndex = 1; parameterIndex<=3; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+        statement.setString(1,object[0]);
+        statement.setInt(2,Integer.parseInt(object[1]));
+        statement.setString(3,object[2]);
         statement.executeUpdate();
     }
 
@@ -296,7 +307,10 @@ public final class Database implements AutoCloseable{
         PreparedStatement statement = connection.prepareStatement("INSERT INTO food_products VALUES (?,?,?,?,?,?,?,?)");
 
         for(int parameterIndex = 1; parameterIndex<=8; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 4 ||  parameterIndex == 5 || parameterIndex == 6 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
 
         if(statement.executeUpdate() == 1)
             return newFoodProduct;
@@ -317,7 +331,10 @@ public final class Database implements AutoCloseable{
         PreparedStatement statement = connection.prepareStatement("UPDATE food_products SET name = ?, description = ?, price = ?, " +
                 "rating = ?, preparationTime = ?, category = ?, restaurantId = ? WHERE id = ?");
         for(int parameterIndex = 1; parameterIndex<=7; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 3 ||  parameterIndex == 4 || parameterIndex == 5 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
         statement.setString(8,id);
         return statement.executeUpdate() == 1;
     }
@@ -338,7 +355,10 @@ public final class Database implements AutoCloseable{
         PreparedStatement statement = connection.prepareStatement("INSERT INTO beverage_products VALUES (?,?,?,?,?,?,?,?,?)");
 
         for(int parameterIndex = 1; parameterIndex<=9; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 4 ||  parameterIndex == 5 || parameterIndex == 6 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
 
         if(statement.executeUpdate() == 1)
             return newBeverageProduct;
@@ -351,7 +371,7 @@ public final class Database implements AutoCloseable{
         while(results.next())
             beverageProducts.add(new BeverageProduct(results.getString(1),results.getString(2),
                     results.getString(3),results.getFloat(4),results.getFloat(5),
-                    results.getFloat(6),results.getBoolean(7),results.getString(8),
+                    results.getFloat(6),Boolean.valueOf(results.getString(7)),results.getString(8),
                     results.getString(9)));
         return beverageProducts;
     }
@@ -360,7 +380,11 @@ public final class Database implements AutoCloseable{
         PreparedStatement statement = connection.prepareStatement("UPDATE beverage_products SET name = ?, description = ?, price = ?, " +
                 "rating = ?, preparationTime = ?, alcoholic = ?, type = ?, restaurantId = ? WHERE id = ?");
         for(int parameterIndex = 1; parameterIndex<=8; parameterIndex++ )
-            statement.setString(parameterIndex,object[parameterIndex-1]);
+            if(parameterIndex == 3 ||  parameterIndex == 4 || parameterIndex == 5 )
+                statement.setFloat(parameterIndex,Float.parseFloat(object[parameterIndex-1]));
+            else
+                statement.setString(parameterIndex,object[parameterIndex-1]);
+
         statement.setString(9,id);
         return statement.executeUpdate() == 1;
     }

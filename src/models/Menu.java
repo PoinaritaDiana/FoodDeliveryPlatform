@@ -2,6 +2,7 @@ package models;
 import auxiliar.ProductComparator;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -43,10 +44,10 @@ public class Menu {
 
     public Product searchProductInMenuByName(String productName){
         for(FoodProduct product : foodProductList)
-            if(product.getProductName().equalsIgnoreCase(productName))
+            if((product.getProductName().toLowerCase()).contains(productName.toLowerCase()))
                 return product;
         for(BeverageProduct product : beverageProductList)
-            if(product.getProductName().equalsIgnoreCase(productName))
+            if((product.getProductName().toLowerCase()).contains(productName.toLowerCase()))
                 return product;
         return null;
     }
