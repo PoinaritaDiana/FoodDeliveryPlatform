@@ -1,5 +1,7 @@
 # Food Delivery Platform - DeliverEAT
 
+* [Requirements](requirementsPAO.pdf)
+
 Objects that are defined on the platform:
 - User -> Customer, DeliveryPerson
 - Restaurant
